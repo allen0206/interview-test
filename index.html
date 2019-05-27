@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>遊戲前端</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <style>
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container bg-primary">
+        <div class="row py-5">
+          <div class="col-6">
+            <img
+              class="w-100"
+              src="https://images.unsplash.com/photo-1513677785800-9df79ae4b10b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+              alt
+            />
+          </div>
+          <div class="col-6">
+            <div
+              class="bg-light text-center h5 border-yellow"
+              style="height:93px;line-height:93px;border: orange 5px solid;"
+              :class="{'border-success':time.sec > 60,'border-secondary':time.sec === 0}"
+            >
+              倒數時間：{{ time.sec }}
+            </div>
+            <div
+              class="bg-light text-center h5"
+              style="height:93px;line-height:93px"
+            >
+              商品名稱：三顆蘋果
+            </div>
+            <div
+              class="bg-light text-center h5"
+              style="height:93px;line-height:93px"
+            >
+              剩餘數量：{{ num }}
+            </div>
+            <a
+              class="bg-light text-center h5 w-50 btn"
+              style="height:50px"
+              @click="openmodal"
+              v-if="num > 0"
+              :class="{'disabled': time.sec === 0}"
+            >
+              購買
+            </a>
+            <a
+              class="bg-light text-center h5 w-50 btn"
+              style="height:50px"
+              @click="openmodal"
+              v-if="num === 0"
+              :class="{'disabled': time.sec === 0}"
+            >
+              預購
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="">我要購買</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body text-center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button
+                  type="button"
+                  class="btn btn-secondary rounded-0"
+                  @click="decrease"
+                >
+                  減少
+                </button>
+                <div class="h2 mx-4">{{ calcnum }}</div>
+                <button
+                  type="button"
+                  class="btn btn-secondary rounded-0"
+                  @click="increase"
+                >
+                  增加
+                </button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" @click="confirm">
+                確認
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" tabindex="-1" role="dialog" id="modal2">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="">我要預購</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body text-center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button
+                  type="button"
+                  class="btn btn-secondary rounded-0"
+                  @click="dec"
+                >
+                  減少
+                </button>
+                <div class="h2 mx-4">{{ prenum }}</div>
+                <button
+                  type="button"
+                  class="btn btn-secondary rounded-0"
+                  @click="inc"
+                >
+                  增加
+                </button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" @click="close">
+                確認
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          time: { sec: 70 },
+          num: 10,
+          calcnum: 1,
+          prenum: 1,
+          status: "購買"
+        },
+        mounted() {
+          this.countdown();
+        },
+        methods: {
+          countdown() {
+            const vm = this;
+            setInterval(function() {
+              if (vm.time.sec > 0) {
+                vm.time.sec = vm.time.sec - 1;
+              }
+            }, 1000);
+          },
+          openmodal() {
+            const vm = this;
+            if (vm.num > 0) {
+              $("#modal").modal("show");
+            } else {
+              $("#modal2").modal("show");
+            }
+          },
+          decrease() {
+            const vm = this;
+            if (vm.calcnum - 1 > 0) {
+              vm.calcnum = vm.calcnum - 1;
+            } else {
+              return;
+            }
+          },
+          increase() {
+            const vm = this;
+            if (vm.calcnum + 1 > vm.num) {
+              return;
+            } else {
+              vm.calcnum = vm.calcnum + 1;
+            }
+          },
+          confirm() {
+            const vm = this;
+            vm.num = vm.num - vm.calcnum;
+            vm.calcnum = 1;
+            $("#modal").modal("hide");
+          },
+          dec() {
+            const vm = this;
+            if (vm.prenum - 1 > 0) {
+              vm.prenum = vm.prenum - 1;
+            }
+          },
+          inc() {
+            const vm = this;
+            if (vm.prenum + 1 < 100) {
+              vm.prenum = vm.prenum + 1;
+            }
+          },
+          close() {
+            $("#modal2").modal("hide");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -49,8 +49,7 @@
               class="bg-light text-center h5 w-50 btn"
               style="height:50px"
               @click="openmodal"
-              v-if="num > 0"
-              :class="{'disabled': time.sec === 0}"
+              v-if="num > 0 && time.sec>0"
             >
               購買
             </a>
@@ -58,10 +57,17 @@
               class="bg-light text-center h5 w-50 btn"
               style="height:50px"
               @click="openmodal"
-              v-if="num === 0"
-              :class="{'disabled': time.sec === 0}"
+              v-if="num === 0 && time.sec>0"
             >
               預購
+            </a>
+            <a
+              class="bg-light text-center h5 w-50 btn disabled"
+              style="height:50px"
+              @click="openmodal"
+              v-if="time.sec === 0"
+            >
+             完售
             </a>
           </div>
         </div>
